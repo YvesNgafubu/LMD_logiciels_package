@@ -1,0 +1,358 @@
+#!/bin/bash
+echo  "======================================================================
+        ******Vous êtes dans l'installation de l'LMD_logiciels_package******
+======================================================================
+
+                                                                       
+ Author: Prof.Dr BOPE DOMILONGO Christian                              
+                                                                       
+                                                                                                                                   
+https://github.com/YvesNgafubu/LMD_logiciels_package                                      
+                                                                       
+                     UNIVERSITE DE KINSHASA                                  
+                FACULTE DES SCIENCES ET TECHNOLOGIES                                   
+                MENTION: MATHEMATIQUE ET INFORMATIQUE                        
+                                                                                                                     				       
+                     ANNEE ACADEMIQUE : 2022 - 2023                                          
+=========================================================================
+
+echo ""
+
+printf "menu :\n\n"
+     echo "1. Installer tout les paquets"
+     echo "2. Selectionner les paquets à installer"
+     echo "3. Installer localement les paquets"
+     echo "4. Quit: pour quitter le programme\n"
+     echo -e "5. Detecter directement les paquets en ligne puis installer"
+     echo ""
+     echo "#########################################################################"
+     echo ""
+
+function dependance {
+echo ""
+read -p "Voulez vous rêgler les dépendances des paquets ?? [o/n] (connexion requise) : " dep
+
+if [ "$dep" = "o" ];then
+sudo apt update   
+sudo apt-get -f install
+sudo apt --fix-broken install  
+else
+echo "Good bye !"
+fi
+}
+
+choix=9
+while  (( $choix <= 0 || $choix>5 )) 
+do
+read -p "Entrez votre choix suivant le menu (choisissez un chiffre !!!): " choix
+if (( $choix<=0 || $choix>5 )); then
+echo "Le choix doit être dans l'intervale de [1,5]"
+fi
+done
+
+if [ "$choix" = "1" ];then
+
+cd /home/`users`/Téléchargements
+
+git clone https://github.com/Eric-mboma/Unikin_Package
+
+sleep 5
+
+cd Unikin_Package/
+
+echo " "
+echo "Voici la liste des nos fichiers, veuillez saisir le numéro de(s) fichier(s) pour les installés : "
+echo " "
+
+compt=0;
+
+for entry in `ls $search_dir`; do
+    echo $entry
+    compt=$((compt +1));
+done
+
+sudo dpkg -i `find . -type f -name '*.deb'` 
+
+rt=""
+dependance
+echo "???"
+until  [[ "$rt" = "q" ]]; do
+echo "Installation réaliser avec succès veuillez saisir 'q' pour quitter !!!"
+echo ""
+read -p "Veuillez saisir le caractère 'q' pour quitter :" rt
+done
+if [ "$rt" = "q" ]; then
+exit
+fi
+
+elif [ "$choix" = "4" ]; then
+echo "Good bye !!!"
+exit
+elif [ "$choix" = "5" ];then
+
+sudo apt install putty
+sudo apt install vlc
+sudo apt-get install ettercap-graphical
+sudo apt install wireshark
+sudo apt --fix-broken install
+
+rt=""
+until  [[ "$rt" = "q" ]]; do
+echo "Installation réaliser avec succès veuillez saisir 'q' pour quitter !!!"
+echo ""
+read -p "Veuillez saisir le caractère 'q' pour quitter :" rt
+done
+if [ "$rt" = "q" ]; then
+exit
+fi
+
+elif [ "$choix" = "3" ]; then
+echo ""
+echo "Vos dossier des départ sont : Bureau, Documents, Images, Modèles, 
+Musique, Public, Téléchargement et Vidéos "
+echo ""
+read -p "Chemin d'accès du dossier vers les paquets (ex: Bureau/nom-du-dossier):" chemin
+echo "#########################################################################"
+echo ""
+
+echo -e "MENU :"
+echo ""
+echo "1. installer tout les paquets"
+echo -e "2. Séléctionner les paquets (rassurer vous que vos paquets soit étiqueté)"
+echo ""
+read -p "Saisissez le choix (cfr MENU) :" choix2
+
+if [[ "$choix2" = "1" ]]; then
+
+sudo dpkg -i `find . -type f -name '*.deb'` 
+
+rt=""
+dependance
+echo "???"
+until  [[ "$rt" = "q" ]]; do
+echo "Installation réaliser avec succès veuillez saisir 'q' pour quitter !!!"
+echo ""
+read -p "Veuillez saisir le caractère 'q' pour quitter :" rt
+done
+if [ "$rt" = "q" ]; then
+exit
+fi
+else
+
+
+if [[ -d "/home/`users`/$chemin" ]]; then
+cd /home/`users`/$chemin
+echo ""
+read -p "Veuillez saisir le nombre des fichiers à installer :" nbr
+
+while  (( $nbr <= 0 || $nbr>$compt -1 )) 
+do
+read -p "Veuillez saisir le nombre des paquets à installer :" nbr
+echo ""
+if (( $nbr<=0 || $nbr>$compt -1 )); then
+echo " Le nombre des paquets doit être soit 1, soit inférieur à $compt. c_à_d [1, $compt["
+echo ""
+fi
+done
+
+echo " "
+echo "#########################################################################"
+echo "Veuillez saisir $nbr choix (choisissez les chiffres !!!): "
+echo " "
+for ((i= 1; i <=$nbr; i++)); do
+read -p "Paquet $i :" tt[i]
+done
+
+for s1 in ${tt[*]}; do
+if (( $s1 <= 0 || $s1 > $compt ));then
+echo ""
+echo "Le numéro du paquet doit être compris entre 1 et $compt; c_à_d [1,$compt]"
+echo "L'un de numéro n'est pas dans l'intervalle !!, Veuillez reprendre !!"
+echo ""
+echo "#########################################################################"
+for ((i= 1; i <=$nbr; i++)); do
+read -p "Paquet $i :" tt[i]
+done
+fi
+done
+echo "#########################################################################"
+echo " "
+echo "Votre choix se porte sur le(s) paquets(s) :"
+echo ""
+
+for s in ${tt[*]}; do
+
+find . -type f -name "*-$s.deb"
+
+done
+echo ""
+echo "#########################################################################"
+echo ""
+cd /home/`users`/
+
+k="tAmponss";
+
+if [[ -d "$k" ]]; then
+
+for s in ${tt[*]}; do
+
+cd /home/`users`/$chemin
+
+cp -v `find . -type f -name "*-$s.deb"` /home/`users`/tAmponss
+
+done
+
+cd /home/`users`/tAmponss
+
+sudo dpkg -i `find . -type f -name '*.deb'`
+
+rm *.deb 
+cd ..
+rmdir tAmponss
+
+else
+
+mkdir /home/`users`/tAmponss
+
+for s in ${tt[*]}; do
+
+cd /home/`users`/$chemin
+
+cp -v `find . -type f -name "*-$s.deb"` /home/`users`/tAmponss
+
+done
+
+cd /home/`users`/tAmponss
+
+sudo dpkg -i `find . -type f -name '*.deb'`
+
+rm *.deb 
+cd ..
+rmdir tAmponss
+
+fi
+
+else
+echo "Erreur ! (mauvais chemin d'accès)"
+fi
+dependance
+fi
+
+elif [ "$choix" = "2" ]; then
+
+cd /home/`users`/Téléchargements
+
+git clone https://github.com/Eric-mboma/Unikin_Package
+
+sleep 5
+
+cd Unikin_Package/
+
+echo " "
+echo "Voici la liste des nos fichiers, veuillez saisir le numéro de(s) fichier(s) pour les installés : "
+echo " "
+
+compt=0;
+
+for entry in `ls $search_dir`; do
+    echo $entry
+    compt=$((compt +1));
+done
+
+echo ""
+read -p "Veuillez saisir le nombre des fichiers à installer :" nbr
+
+while  (( $nbr <= 0 || $nbr>$compt -1 )) 
+do
+read -p "Veuillez saisir le nombre des paquets à installer :" nbr
+echo ""
+if (( $nbr<=0 || $nbr>$compt -1 )); then
+echo " Le nombre des paquets doit être soit 1, soit inférieur à $compt. c_à_d [1, $compt["
+echo ""
+fi
+done
+
+echo " "
+echo "#########################################################################"
+echo "Veuillez saisir $nbr choix (choisissez les chiffres !!!): "
+echo " "
+for ((i= 1; i <=$nbr; i++)); do
+
+read -p "Paquet $i :" tt[i]
+
+done
+
+for s1 in ${tt[*]}; do
+if (( $s1 <= 0 || $s1 > $compt ));then
+echo ""
+echo "le numéro du paquet doit être compris entre 1 et $compt; c_à_d [1,$compt]"
+echo "L'un de numéro n'est pas dans l'intervalle, Veuillez reprendre !!"
+echo ""
+echo "#########################################################################"
+for ((i= 1; i <=$nbr; i++)); do
+read -p "Paquet $i :" tt[i]
+done
+echo "#########################################################################"
+fi
+done
+
+echo "#########################################################################"
+echo " "
+echo "Votre choix se porte sur le(s) paquets(s) :"
+echo ""
+
+for s in ${tt[*]}; do
+
+find . -type f -name "*-$s.deb"
+
+done
+echo ""
+echo "#########################################################################"
+echo ""
+cd /home/`users`/
+
+k="tAmponss";
+
+if [[ -d "$k" ]]; then
+
+for s in ${tt[*]}; do
+
+cd /home/`users`/Téléchargements/Unikin_Package/
+
+cp -v `find . -type f -name "*-$s.deb"` /home/`users`/tAmponss
+
+done
+
+cd /home/`users`/tAmponss
+
+sudo dpkg -i `find . -type f -name '*.deb'`
+
+rm *.deb 
+cd ..
+rmdir tAmponss
+
+else
+
+mkdir /home/`users`/tAmponss
+
+for s in ${tt[*]}; do
+
+cd /home/`users`/Téléchargements/Unikin_Package/
+
+cp -v `find . -type f -name "*-$s.deb"` /home/`users`/tAmponss
+
+done
+
+cd /home/`users`/tAmponss
+
+sudo dpkg -i `find . -type f -name '*.deb'`
+
+rm *.deb 
+cd ..
+rmdir tAmponss
+
+fi
+
+dependance
+
+fi
